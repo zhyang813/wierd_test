@@ -10,8 +10,6 @@ $random_images = array(
 
 $cover_image = 'http://www.lovethispic.com/uploaded_images/20521-Rocky-Beach-Sunset.jpg';
 
-
-
 // load cookies
 $div1_cookie = isset($_COOKIE['div1']) ?  $_COOKIE['div1'] : '25';
 $div2_cookie = isset($_COOKIE['div2']) ?  $_COOKIE['div2'] : '75';
@@ -186,8 +184,6 @@ $(document).ready(function() {
         'width' : '100%',
         'background-color' : 'red'
       });
-      // ajaxCall({'action': 'div3', 'value': '100'});
-      // ajaxCall({'action': 'div3c', 'value': 'red'});
       ajaxCall({'action': 'div3', 'value': '100', 'color': 'red'});
 		} else {
 			$(this).css({
@@ -195,7 +191,6 @@ $(document).ready(function() {
         'background-color' : 'blue'
       });
       ajaxCall({'action': 'div3', 'value': '50', 'color': 'blue'});
-      // ajaxCall({'action': 'div3c', 'value': 'blue'});
 		}
 	});
   
@@ -204,11 +199,9 @@ $(document).ready(function() {
 		var divWidth = 100 * parseFloat($(this).css('width')) / parseFloat($(this).parent().css('width'));
 		if(Math.round(divWidth) === 90) {
 			$(this).css('width', '100%');
-			// document.cookie = 'div4=100%';
 			ajaxCall({'action': 'div4', 'value': '100'});
 		} else {
 			$(this).css('width', '90%');
-			// document.cookie = 'div4=90%';
 			ajaxCall({'action': 'div4', 'value': '90'});
 
 		}
