@@ -10,12 +10,32 @@ $random_images = array(
 
 $cover_image = 'http://www.lovethispic.com/uploaded_images/20521-Rocky-Beach-Sunset.jpg';
 
-//php code here
-$div1_cookie = $_COOKIE['div1'] ?  $_COOKIE['div1'] : '25%';
-$div2_cookie = $_COOKIE['div2'] ?  $_COOKIE['div2'] : '75%';
-$div3_cookie = $_COOKIE['div3'] ?  $_COOKIE['div3'] : '50%';
-$div3c_cookie = $_COOKIE['div3c'] ?  $_COOKIE['div3c'] : 'blue';
-$div4_cookie = $_COOKIE['div4'] ?  $_COOKIE['div4'] : '90%';
+
+
+// load cookies
+$div1_cookie = isset($_COOKIE['div1']) ?  $_COOKIE['div1'] : '25';
+$div2_cookie = isset($_COOKIE['div2']) ?  $_COOKIE['div2'] : '75';
+$div3_cookie = isset($_COOKIE['div3']) ?  $_COOKIE['div3'] : '50';
+$div3c_cookie = isset($_COOKIE['div3c']) ?  $_COOKIE['div3c'] : 'blue';
+$div4_cookie = isset($_COOKIE['div4']) ?  $_COOKIE['div4'] : '90';
+
+if (isset($_POST['action'])) {
+	  switch ($_POST['action']) {
+	  	case 'div1';
+	  	  setcookie('div1', $_POST['value'], 0, '/');
+	  	  break;
+	  	case 'div2';
+	  	  setcookie('div2', $_POST['value'], 0, '/');
+	  	  break;
+	  	case 'div3';
+	  	  setcookie('div3', $_POST['value'], 0, '/');
+	  	  setcookie('div3c', $_POST['color'], 0, '/');
+	  	  break;
+	  	case 'div4';
+	  	  setcookie('div4', $_POST['value'], 0, '/');
+	  	  break;
+	  }
+}
 
 ?>
 <!doctype html>
@@ -79,7 +99,7 @@ table {
 }
 
 #div1 {
-	width: <?php echo $div1_cookie; ?>;
+	width: <?php echo $div1_cookie.'%'; ?>;
 	height: 25vh;
 	background-image: url(<?php echo $cover_image; ?>);
   background-repeat: no-repeat;
@@ -87,21 +107,21 @@ table {
 }
 
 #div2 {
-	width: <?php echo $div2_cookie; ?>;;
+	width: <?php echo $div2_cookie.'%'; ?>;;
 	height: 25vh;
 	background-color: orange;
 	text-align: center;
 }
 
 #div3 {
-	width: <?php echo $div3_cookie; ?>;;
+	width: <?php echo $div3_cookie.'%'; ?>;;
 	height: 25vh;
 	background-color: <?php echo $div3c_cookie; ?>;;
 	transition: background-color 1s;
 }
 
 #div4 {
-	width: <?php echo $div4_cookie; ?>;;
+	width: <?php echo $div4_cookie.'%'; ?>;;
 	height: 25vh;
 	background-color: yellow;
 	text-align: center;
@@ -123,16 +143,26 @@ table {
 
 
 $(document).ready(function() {
+
+	var ajaxCall = function (request) {
+		$.ajax({
+			data: request,
+			type: 'post',
+			success: function(res) {
+				console.log("successful" + ' ' + request.action + ' ' + request.value);
+			}
+		});
+	};
   
   //click event for first div
 	$("#div1").click(function() {
 		var divWidth = 100 * parseFloat($(this).css('width')) / parseFloat($(this).parent().css('width'));
 		if(Math.round(divWidth) === 25) {
 			$(this).css('width', '100%');
-			document.cookie = 'div1=100%';
+			ajaxCall({'action': 'div1', 'value': '100'});
 		} else {
 			$(this).css('width', '25%');
-			document.cookie = 'div1=25%';
+			ajaxCall({'action': 'div1', 'value': '25'});
 		}
 	});
   
@@ -141,10 +171,10 @@ $(document).ready(function() {
 		var divWidth = 100 * parseFloat($(this).css('width')) / parseFloat($(this).parent().css('width'));
 		if(Math.round(divWidth) === 75) {
 			$(this).css('width', '100%');
-			document.cookie = 'div2=100%';
+			ajaxCall({'action': 'div2', 'value': '100'});
 		} else {
 			$(this).css('width', '75%');
-			document.cookie = 'div2=75%';
+			ajaxCall({'action': 'div2', 'value': '75'});
 		}
 	});
   
@@ -156,15 +186,16 @@ $(document).ready(function() {
         'width' : '100%',
         'background-color' : 'red'
       });
-      document.cookie = 'div3=100%';
-      document.cookie = 'div3c=red';
+      // ajaxCall({'action': 'div3', 'value': '100'});
+      // ajaxCall({'action': 'div3c', 'value': 'red'});
+      ajaxCall({'action': 'div3', 'value': '100', 'color': 'red'});
 		} else {
 			$(this).css({
         'width' : '50%',
         'background-color' : 'blue'
       });
-      document.cookie = 'div3=50%';
-      document.cookie = 'div3c=blue';
+      ajaxCall({'action': 'div3', 'value': '50', 'color': 'blue'});
+      // ajaxCall({'action': 'div3c', 'value': 'blue'});
 		}
 	});
   
@@ -173,10 +204,13 @@ $(document).ready(function() {
 		var divWidth = 100 * parseFloat($(this).css('width')) / parseFloat($(this).parent().css('width'));
 		if(Math.round(divWidth) === 90) {
 			$(this).css('width', '100%');
-			document.cookie = 'div4=100%';
+			// document.cookie = 'div4=100%';
+			ajaxCall({'action': 'div4', 'value': '100'});
 		} else {
 			$(this).css('width', '90%');
-			document.cookie = 'div4=90%';
+			// document.cookie = 'div4=90%';
+			ajaxCall({'action': 'div4', 'value': '90'});
+
 		}
 	});
 
